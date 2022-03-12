@@ -1,12 +1,12 @@
 #Set parameters.
-
-$resourceGroup = 'AZ143RG02'
-$location= 'EastUS'
-$vmName = "DCVM02"
-$snapshotName = 'SQLPatching2022'
+$resourceGroup = 'RSGname'
+$location= "canadacentral"
+$vmName = "VMname"
+$snapshotName = 'Snapname'
+#$tags += @{Empty=$null; Department="IT";Owner="RobLo";Team="Networking"}
+#$tag @{Empty=$null; Department="IT";Owner="RobLo";Team="Networking"}
 
 #Retrieve the VM.
-
 $vm = Get-AzVM `
      -ResourceGroupName $resourceGroup `
      -Name $vmName
@@ -18,9 +18,14 @@ $snapshot =  New-AzSnapshotConfig `
     -Location $location `
     -CreateOption copy
 
-#Take the snapshot.
 
+#Take the snapshot.
 New-AzSnapshot `
     -Snapshot $snapshot `
     -SnapshotName $snapshotName `
     -ResourceGroupName $resourceGroup
+    
+
+#Getsnap
+ #   Get-AzSnapshot `
+ #   -ResourceGroupName $resourceGroupName

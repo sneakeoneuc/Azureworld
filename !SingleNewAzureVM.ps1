@@ -2,43 +2,43 @@
 #Connect-AzAccount
 
 # Connect to Subscription
-#$context = Get-AzSubscription -SubscriptionId 7daa7f89-230f-4552-bedc-2b4780dca8ad
+#$context = Get-AzSubscription -SubscriptionId "xxx-xxx-xxx"
 #Set-AzContext $context
 
 #create RG
-New-AzResourceGroup -ResourceGroupName AZ143RG02 -Location EastUS
+New-AzResourceGroup -ResourceGroupName AZRSGname -Location EastUS
 
 # Create Subnet
 $subnetConfig = New-AzVirtualNetworkSubnetConfig `
 -Name PSSubnet `
--AddressPrefix 172.101.1.0/24
+-AddressPrefix 10.10.1.0/24
 
 # Create Vnet
 $vnet = New-AzVirtualNetwork `
--ResourceGroupName AZ143RG02 `
+-ResourceGroupName AZRSGname `
 -Location EastUS `
--Name 143ITVnet `
--AddressPrefix 172.101.0.0/16 `
+-Name VNETname `
+-AddressPrefix 10.10.0.0/16 `
 -Subnet $subnetConfig
 
 # Create PIP
 $pip = New-AzPublicIpAddress `
--ResourceGroupName AZ143RG02 `
+-ResourceGroupName AZRSGname `
 -Location EastUS `
 -AllocationMethod Static `
 -Name PSPIP
 
 # Create NIC
 $nic = New-AzNetworkInterface `
--ResourceGroupName AZ143RG02 `
+-ResourceGroupName AZRSGname `
 -Location EastUS `
--Name Nic143001 `
+-Name Nicname `
 -SubnetId $vnet.Subnets[0].Id `
 -PublicIpAddressId $pip.Id
 
 # Create NSG Rule
 $nsgRule = New-AzNetworkSecurityRuleConfig `
--Name NSG143ITRuleRDP `
+-Name NSGname `
 -Protocol Tcp `
 -Direction Inbound `
 -Priority 1000 `
@@ -50,7 +50,7 @@ $nsgRule = New-AzNetworkSecurityRuleConfig `
 
 # Create NSG Rule
 $nsgRule = New-AzNetworkSecurityRuleConfig `
--Name NSG143ITRuleRDP `
+-Name NSGname `
 -Protocol Tcp `
 -Direction Inbound `
 -Priority 1001 `
@@ -61,7 +61,7 @@ $nsgRule = New-AzNetworkSecurityRuleConfig `
 -Access Allow
 
 $nsgRule1 = New-AzNetworkSecurityRuleConfig `
--Name NSG143ITRuleAny `
+-Name NSGRuleAny `
 -Protocol Tcp `
 -Direction Inbound `
 -Priority 1002 `
@@ -73,7 +73,7 @@ $nsgRule1 = New-AzNetworkSecurityRuleConfig `
 
 # Create NSG
 $nsg = New-AzNetworkSecurityGroup `
--ResourceGroupName AZ143RG02 `
+-ResourceGroupName AZRSGname `
 -Location EastUS `
 -Name NSG143IT `
 -SecurityRules $nsgRule,$nsgRule1
@@ -83,7 +83,7 @@ Set-AzVirtualNetworkSubnetConfig `
 -Name PSSubnet `
 -VirtualNetwork $vnet `
 -NetworkSecurityGroup $nsg `
--AddressPrefix 172.101.1.0/24
+-AddressPrefix 10.10.1.0/24
 
 #Update subnet with NSG
 Set-AzVirtualNetwork -VirtualNetwork $vnet
@@ -92,12 +92,11 @@ Set-AzVirtualNetwork -VirtualNetwork $vnet
 $cred = Get-Credential
 
 #Set Vm config, name and Size
-$vmconfig = New-AzVMConfig -VMName DCVM02 -VMSize Standard_B1ms | `
-Set-AzVMOperatingSystem -Windows -ComputerName DCVM02 -Credential $cred | `
+$vmconfig = New-AzVMConfig -VMName newVMname -VMSize Standard_B1ms | `
+Set-AzVMOperatingSystem -Windows -ComputerName newVMname -Credential $cred | `
 Set-AzVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2019-Datacenter -Version latest | Add-AzVMNetworkInterface -Id $nic.Id
 
 
 #Create VM
-New-AzVM -ResourceGroupName AZ143RG02 -Location EastUS -VM $vmconfig
-
+New-AzVM -ResourceGroupName AZRSGname -Location EastUS -VM $vmconfig
 

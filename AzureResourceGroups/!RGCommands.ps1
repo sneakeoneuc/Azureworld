@@ -13,19 +13,14 @@ Get-AzResourceGroup -Name $resourceGroupName
 
 #Create New Resource Group single line
 New-AzResourceGroup -ResourceGroupName "AZRG-143IT-DEV" -Location "Eastus"
-New-AzResourceGroup -ResourceGroupName "AZRG-143IT-DEV2" -Location "Eastus"
-New-AzResourceGroup -ResourceGroupName "AZRG-143IT-AA" -Location "Canadacentral"
 }
 
 #Removing ResourceGroup
 {
 Get-AzResourceGroup -Location eastus
 Get-AzResourceGroup | Format-Table
+
 Remove-AzResourceGroup -Name AZRG-143IT-PROD-NON
-Remove-AzResourceGroup -Name azsmokeautoRG -AsJob
-Remove-AzResourceGroup -Name AZRG-143IT-DEV-NON
-Remove-AzResourceGroup -Name AZRG-143IT-PROD
-Remove-AzResourceGroup -Name cloud-shell-storage-eastus
 }
 
 #Get Resource Groups

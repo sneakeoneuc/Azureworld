@@ -52,3 +52,14 @@ Get-AzResource -ResourceGroupName az-azsmoke-vnet | ft
 #Cleanup resourcegroups
 Get-AzResourceGroup -Name 'azrg-143it*'
 Get-AzResourceGroup -Name 'azrg-143it*' | Remove-AzResourceGroup -Force -AsJob
+
+#Connect-AzAccount
+Get-AzSubscription
+
+$resourceGroupName = Read-Host -Prompt "Enter the Resource Group name"
+$location = Read-Host -Prompt "Enter the location (i.e. centralus)"
+
+New-AzResourceGroup -Name $resourceGroupName -Location $location
+
+$resourceGroupName = Read-Host -Prompt "Enter the Resource Group name"
+$location = Read-Host -Prompt "Enter the location (i.e. centralus)"`

@@ -62,4 +62,4 @@ $location = Read-Host -Prompt "Enter the location (i.e. centralus)"
 New-AzResourceGroup -Name $resourceGroupName -Location $location
 
 $resourceGroupName = Read-Host -Prompt "Enter the Resource Group name"
-$location = Read-Host -Prompt "Enter the location (i.e. centralus)"`
+$location = Read-Host -Prompt "Enter the location (i.e. eastus,centralus,canadaeast)"
